@@ -22,18 +22,16 @@ public class WebMvcConfig implements WebMvcConfigurer {
 	@Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler(
-                "/images/**",
+                "/img/**",
                 "/css/**",
                 "/js/**",
-                "/fonts/**",
-                "/media/**",
+                "/scss/**",
                 "/vendor/**")
                 .addResourceLocations(
-                        "classpath:/WEB-INF/common/images/",
+                        "classpath:/WEB-INF/common/img/",
                         "classpath:/WEB-INF/common/css/",
                         "classpath:/WEB-INF/common/js/",
-                        "classpath:/WEB-INF/common/fonts/",
-                        "classpath:/WEB-INF/common/media/",
+                        "classpath:/WEB-INF/common/scss/",
                         "classpath:/WEB-INF/common/vendor/");
     }
 }
