@@ -69,7 +69,6 @@ public class HttpInterceptor extends HandlerInterceptorAdapter {
 	private boolean exceptCheckURL(String url, SiteAuthority auth) throws Exception {
 		switch(auth) {
 		case MANAGER:
-				return true;
 		case GUEST:
 			if (urlChecker(url, PermissionCheckURL.VIEWPAGE_URL) == true)
 				return true;

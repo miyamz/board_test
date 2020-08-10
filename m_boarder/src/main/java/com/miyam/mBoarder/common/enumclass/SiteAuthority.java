@@ -17,7 +17,7 @@ public enum SiteAuthority {
 	
 	public static SiteAuthority valueOf(int value) {
 		for (SiteAuthority auth : SiteAuthority.values()) {
-			if (auth.value == value) {
+			if (auth.value >= value) {
 				return auth;
 			}
 		}
