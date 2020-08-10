@@ -10,4 +10,17 @@
 		FROM tbl_board_users
 	</select>
 	
+	<select id="sLoginUser" parameterType="com.miyam.mBoarder.model.BoardUserDto" resultType="com.miyam.mBoarder.model.BoardUserDto">
+		SELECT idx, user_id, name, grade
+		FROM tbl_board_users
+		WHERE user_id=#{user_id} AND password=#{password}
+	</select>
+	
+	<insert id="userAdd" parameterType="com.miyam.mBoarder.model.BoardUserDto" useGeneratedKeys="true" keyProperty="idx">
+		INSERT INTO tbl_board_users
+		(user_id, password, name, grade, update_date)
+		VALUES
+		(#{user_id}, #{password}, #{name}, #{grade}, now())
+	</insert>
+	
 </mapper>

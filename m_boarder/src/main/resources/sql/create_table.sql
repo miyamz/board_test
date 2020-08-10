@@ -1,7 +1,7 @@
 create table tbl_board_users(
     idx bigint not null auto_increment,
     user_id varchar(20) not null,
-    password varchar(30) not null,
+    password varchar(256) not null,
     name varchar(20),
     grade int not null,
     update_date datetime not null,
@@ -15,7 +15,7 @@ create table tbl_board(
     writer_idx bigint not null,
     title varchar(100) not null,
     body clob,
-    password varchar(30),
+    password varchar(256),
     update_date datetime not null,
     primary key(idx),
     constraint idx_parent_idx index(parent_idx),
@@ -24,4 +24,4 @@ create table tbl_board(
 );
 
 INSERT INTO tbl_board_users(user_id, password, name, grade, update_date)
-VALUES ('root', 'password!1', '관리자', 1, now());
+VALUES ('root', '6b1944947aa2ae57c54288b1381ea0c94cffb55c50cc0174d302af2a6ee8bcf4', '관리자', 1, now());

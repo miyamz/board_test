@@ -8,6 +8,7 @@ import com.miyam.mBoarder.model.BoardUserDto;
 
 @Mapper
 public interface BoardUserMapper {
-	public void userAdd(BoardUserDto user);
 	public List<BoardUserDto> getAllUser();
+	public BoardUserDto sLoginUser(BoardUserDto loginInfo);
+	public int userAdd(BoardUserDto userInfo);
 }

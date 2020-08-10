@@ -4,6 +4,9 @@ import java.util.Date;
 
 import org.apache.ibatis.type.Alias;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import lombok.Data;
 
 @Data
@@ -51,5 +54,21 @@ public class BoardUserDto {
 	}
 	public void setUpdate_date(Date update_date) {
 		this.update_date = update_date;
+	}
+
+	@Override
+	public String toString() {
+		// toString을 json형태로 내보낸다
+		try {
+			ObjectMapper objectMapper = new ObjectMapper();
+			String retJson = objectMapper.writeValueAsString(this);
+			
+			return retJson;
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return "";
 	}
 }
