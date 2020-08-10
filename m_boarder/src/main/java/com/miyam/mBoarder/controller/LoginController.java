@@ -31,6 +31,7 @@ public class LoginController {
 	@RequestMapping(value= "/login.do", method= RequestMethod.GET)
 	public ModelAndView viewLoginPage() {
 		ModelAndView mv = new ModelAndView("user/login");
+		mv.addObject("pageTitle", "Login Page");
 		
 		return mv;
 	}
@@ -38,6 +39,7 @@ public class LoginController {
 	@RequestMapping(value="/login.do", method=RequestMethod.POST)
 	public ModelAndView progressLogin(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ModelAndView mv = new ModelAndView("user/login");
+		mv.addObject("pageTitle", "Login Page");
 		// 로그인 처리만 한다.. 그 뒤 index페이지로 redirect
 		String userID = request.getParameter("userID");
 		String passwd = request.getParameter("passwd");
@@ -69,6 +71,7 @@ public class LoginController {
 	@RequestMapping(value="/regist.do", method=RequestMethod.GET)
 	public ModelAndView managerRegistView() throws Exception {
 		ModelAndView mv = new ModelAndView("user/register");
+		mv.addObject("pageTitle", "Register Page");
 		
 		return mv;
 	}
@@ -76,6 +79,7 @@ public class LoginController {
 	@RequestMapping(value="/regist.do", method=RequestMethod.POST)
 	public ModelAndView progressRegist(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ModelAndView mv = new ModelAndView("user/register");
+		mv.addObject("pageTitle", "Register Page");
 		
 		String userID = request.getParameter("userID");
 		String passwd = request.getParameter("passwd");

@@ -7,7 +7,8 @@ public enum PermissionCheckURL {
 	LOGIN_URL("login.do", "logout.do"),
 	REGIST_URL("regist.do", "modifyPass.do", "resetRequest.do"),
 	ERROR_URL(),
-	VIEWPAGE_URL("index.do");
+	VIEWPAGE_URL("index.do"),
+	RESOURCE_PATH("img", "css", "js", "scss", "vendor");
 	
 	List<String> urls;
 	
