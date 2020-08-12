@@ -19,6 +19,16 @@ public class BoardUserDto {
 	private int grade;
 	private Date update_date;
 	
+	private boolean useCookie;
+	
+	public boolean isUseCookie() {
+		return useCookie;
+	}
+	
+	public void setUseCookie(boolean useCookie) {
+		this.useCookie = useCookie;
+	}
+	
 	public long getIdx() {
 		return idx;
 	}

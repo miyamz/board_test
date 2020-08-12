@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="static/header :: commonHead"></head>
+<script th:inline="javascript">
+	/*<![CDATA[*/
+	var isLoad = '[[${isLoad}]]';
+	var isDelete = '[[${isDelete}]]';
+	/*]]>*/
+	$(function() {
+		if (isLoad == '0') {
+			alert("글 불러오기 실패!! \n 관리자에게 문의해주세요.")
+			location.href = contextUrl + "boardList.do"
+		} else if (isLoad == '2') {
+			alert("비밀번호 입력 실패!! 글을 볼수 없습니다.")
+			location.href = contextUrl + "boardList.do"
+		}
+		
+		if (isDelete == '1') {
+			alert("글 삭제완료!!")
+			location.href = contextUrl + "boardList.do"
+		} else if (isDelete == '0') {
+			alert("글 삭제실패!! \n 관리자에게 문의해주세요.")
+			location.href = contextUrl + "boardList.do"
+		}
+	});
+	
+	function moveBoardModify() {
+		var idx = $("#hdBoardIdx").val();
+		
+		location.href = contextUrl + "boardWrite.do?bi=" + idx;
+	}
+</script>
+<body id="page-top">
+	<!-- Page Wrapper -->
+	<div id="wrapper">
+	
+		<!-- Sidebar -->
+		<ul th:replace="static/sideBar :: commonSidebar"></ul>
+		<!-- End of Sidebar -->
+
+		<!-- Content Wrapper -->
+		<div id="content-wrapper" class="d-flex flex-column">
+
+			<!-- Main Content -->
+			<div id="content">
+
+				<!-- Topbar -->
+				<nav th:replace="static/upNavBar :: commonUpNavbar"></nav>
+				<!-- End of Topbar -->
+
+				<!-- Begin Page Content -->
+				<div class="container-fluid">
+
+					<!-- Page Heading -->
+					<h1 class="h3 mb-2 text-gray-800">Board View</h1>
+
+					<!-- DataTales Example -->
+					<div class="card shadow mb-4">
+						<div class="card-body">
+							<form class="user" id="boardViewForm" name="boardViewForm" th:action="@{/boardDelete.do}" method="post">
+								<div class="table-responsive">
+									<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+										<thead>
+											<tr>
+												<th><th:block th:text="${boardData.getTitle()}"></th:block></th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td><th:block th:text="${boardData.getBody()}"></th:block></td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<div class="row">
+									<div class="col-sm-12 col-md-6">
+										<a th:if="${loginSession.getIdx() == boardData.getWriter_idx()}"
+											href="#" class="btn btn-primary btn-icon-split" onclick="$('#boardViewForm').submit()">
+											<span class="text">Delete</span>
+										</a>
+										<input type="hidden" id="hdBoardIdx" name="hdBoardIdx" th:value="${boardData.getIdx()}" />
+									</div>
+									<div class="col-sm-12 col-md-6">
+										<a th:if="${loginSession.getIdx() == boardData.getWriter_idx()}" 
+											href="javascript:moveBoardModify()" class="btn btn-primary btn-icon-split" style="margin-left:10px; float:right">
+											<span class="text">Modify</span>
+										</a>
+										<a th:href="@{boardList.do}" class="btn btn-primary btn-icon-split" style="float:right">
+											<span class="text">Back List</span>
+										</a>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+
+				</div>
+				<!-- /.container-fluid -->
+
+			</div>
+			<!-- End of Main Content -->
+
+			<!-- Footer -->
+			<footer th:replace="static/footer:: commonFooter"></footer>
+			<!-- End of Footer -->
+
+		</div>
+		<!-- End of Content Wrapper -->
+
+	</div>
+	<!-- End of Page Wrapper -->
+	
+	<!-- Scroll to Top Button-->
+	<a th:replace="static/scrollTopBtn:: commonScrollUpBtn"></a>
+	
+</body>
+</html>

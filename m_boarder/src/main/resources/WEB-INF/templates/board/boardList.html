@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="static/header :: commonHead"></head>
+<script th:inline="javascript">
+	function goViewPage(i) {
+		if (typeof i == "undefined")
+			return false
+			
+		var getUrl = contextUrl + "boardView.do?i=" + i
+		var iPW = $("#hdInputPassword").val()
+		if (typeof iPW != "undefined" || iPW != null) {
+			if (iPW.length != 0)
+				getUrl = getUrl + "&pw=" + iPW
+		}
+		
+		location.href = getUrl
+	}
+	
+	function goPasswdInputPage(i) {
+		if (typeof i == "undefined")
+			return false
+
+		window.open(contextUrl + "pwCheckPopup.do?i=" + i,'ManagerRegist','width=600, height=700, menubar=no, status=no, toolbar=no, scrollbars=no');
+	}
+</script>
+<body id="page-top">
+	<!-- Page Wrapper -->
+	<div id="wrapper">
+	
+		<!-- Sidebar -->
+		<ul th:replace="static/sideBar :: commonSidebar"></ul>
+		<!-- End of Sidebar -->
+
+		<!-- Content Wrapper -->
+		<div id="content-wrapper" class="d-flex flex-column">
+
+			<!-- Main Content -->
+			<div id="content">
+
+				<!-- Topbar -->
+				<nav th:replace="static/upNavBar :: commonUpNavbar"></nav>
+				<!-- End of Topbar -->
+
+				<!-- Begin Page Content -->
+				<div class="container-fluid">
+					<input type="hidden" id="hdInputPassword" />
+					<!-- Page Heading -->
+					<h1 class="h3 mb-2 text-gray-800">Board Tables</h1>
+
+					<!-- DataTales Example -->
+					<div class="card shadow mb-4">
+						<div class="card-header py-3">
+							<h6 class="m-0 font-weight-bold text-primary" style="width:3rem; display:inline;">Board</h6>
+							<a th:href="@{/boardWrite.do}" class="btn btn-primary btn-icon-split" style="float:right">
+								<span class="text">Write</span>
+							</a>
+						</div>
+						<div class="card-body">
+							<div class="row" style="margin-bottom:10px;">
+								<div class="col-sm-12 col-md-6">
+									<div class="dataTables_length" id="dataTable_length">
+										Show <select name="dataTable_length" aria-controls="dataTable" class="custom-select custom-select-sm form-control form-control-sm">
+												<option value="10">10</option>
+												<option value="25">25</option>
+												<option value="50">50</option>
+												<option value="100">100</option>
+											</select>
+									</div>
+								</div>
+								<div class="col-sm-12 col-md-6">
+									<div id="dataTable_filter" class="dataTables_filter">
+										Search: <input type="search" class="form-control form-control-sm" placeholder="" aria-controls="dataTable">
+									</div>
+								</div>
+							</div>
+							<div class="table-responsive">
+								<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+									<thead>
+										<tr>
+											<th width="7%">Idx</th>
+											<th width="66%">Title</th>
+											<th width="12%">Writer</th>
+											<th width="12%">Update</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr th:each="item, num : ${boardList}">
+											<td>[[${item.getIdx()}]]</td>
+											<th:block th:if="${item.getPassword() != null && item.getPassword().trim().length() != 0}">
+												<td style="cursor:pointer;" th:onclick="|javascript:goPasswdInputPage('${item.getIdx()}')|">
+													<i class="fas fa-lock"></i>[[${item.getTitle()}]]
+												</td>
+											</th:block>
+											<th:block th:unless="${item.getPassword() != null && item.getPassword().trim().length() != 0}">
+												<td style="cursor:pointer;" th:onclick="|javascript:goViewPage('${item.getIdx()}')|">
+													[[${item.getTitle()}]]
+												</td>
+											</th:block>
+											<!-- td style="cursor:pointer;" th:onclick="|javascript:goViewPage('${item.getIdx()}')|">
+												<i th:if="${item.getPassword() != null && item.getPassword().length() != 0}" class="fas fa-lock"></i>
+												[[${item.getTitle()}]]
+											</td -->
+											<td>[[${item.getUserID()}]]</td>
+											<td>[[${item.getUpdateDateStr()}]]</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<div class="row">
+								<div class="col-sm-12 col-md-6">
+									<div class="dataTables_info" id="dataTable_info" role="status" aria-live="polite">
+										Showing 1 to 10 of 57 entries
+									</div>
+								</div>
+								<div class="col-sm-12 col-md-6">
+									<div class="dataTables_paginate paging_simple_numbers" id="dataTable_paginate" style="float:right;">
+										<ul class="pagination">
+											<li class="paginate_button page-item previous disabled" id="dataTable_previous">
+												<a href="#" aria-controls="dataTable" data-dt-idx="0" tabindex="0" class="page-link">Previous</a>
+											</li>
+											<li class="paginate_button page-item active">
+												<a href="#" aria-controls="dataTable" data-dt-idx="1" tabindex="0" class="page-link">1</a>
+											</li>
+											<li class="paginate_button page-item next" id="dataTable_next">
+												<a href="#" aria-controls="dataTable" data-dt-idx="7" tabindex="0" class="page-link">Next</a>
+											</li>
+										</ul>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<!-- /.container-fluid -->
+
+			</div>
+			<!-- End of Main Content -->
+
+			<!-- Footer -->
+			<footer th:replace="static/footer:: commonFooter"></footer>
+			<!-- End of Footer -->
+
+		</div>
+		<!-- End of Content Wrapper -->
+
+	</div>
+	<!-- End of Page Wrapper -->
+	
+	<!-- Scroll to Top Button-->
+	<a th:replace="static/scrollTopBtn:: commonScrollUpBtn"></a>
+	
+</body>
+</html>

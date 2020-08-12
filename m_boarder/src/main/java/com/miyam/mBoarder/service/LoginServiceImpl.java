@@ -35,7 +35,7 @@ public class LoginServiceImpl implements LoginService {
 			
 			retUserInfo = buMapper.sLoginUser(user);
 		} catch(Exception ex) {
-			logger.error("Login error: [%s] - DB Error...", ex.getStackTrace());
+			logger.error(String.format("Login error: [%s] - DB Error...", ex.getStackTrace()));
 		}
 		
 		return retUserInfo;
@@ -56,7 +56,7 @@ public class LoginServiceImpl implements LoginService {
 			
 			resultIdx = buMapper.userAdd(user);
 		} catch(Exception ex) {
-			logger.error("Login error: [%s] - DB Error...", ex.getStackTrace());
+			logger.error(String.format("Login error: [%s] - DB Error...", ex.getStackTrace()));
 		}
 		
 		return resultIdx;

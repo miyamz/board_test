@@ -5,9 +5,9 @@ import java.util.List;
 
 public enum PermissionCheckURL {
 	LOGIN_URL("login.do", "logout.do"),
-	REGIST_URL("regist.do", "modifyPass.do", "resetRequest.do"),
+	REGIST_URL("regist.do"),
 	ERROR_URL(),
-	VIEWPAGE_URL("index.do"),
+	VIEWPAGE_URL("index.do", "pwCheckPopup.do", "boardList.do", "boardWrite.do", "boardView.do", "boardDelete.do"),
 	RESOURCE_PATH("img", "css", "js", "scss", "vendor");
 	
 	List<String> urls;

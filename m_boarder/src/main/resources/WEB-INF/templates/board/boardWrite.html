@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="static/header :: commonHead"></head>
+<script th:inline="javascript">
+	/*<![CDATA[*/
+	var isSuccess = '[[${isSuccess}]]';
+	/*]]>*/
+	$(function() {
+		if (isSuccess == '0') {
+			alert("글쓰기 실패!! \n 관리자에게 문의해주세요.")
+			location.href = contextUrl + "boardList.do"
+		}
+		else if(isSuccess == '1') {
+			location.href = contextUrl + "boardList.do"
+		}
+	});
+
+	function writeParamCheck() {
+		if ($.trim($("#boardTitle").val()).length <= 0) {
+			alert("글의 제목은 작성하셔야 합니다.");
+			$("#boardTitle").focus();
+			return false;
+		}
+		
+		if ($("#boardTitle").val().length > 100) {
+			alert("제목의 길이 제한은 100자 입니다.");
+			$("#boardTitle").focus();
+			return false;
+		}
+		
+		if ($("#boardPasswd").val().length > 0) {
+			if (confirm("암호를 입력해야 확인 가능한 게시글이 됩니다. 괜찮습니까?") == false) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
+</script>
+<body id="page-top">
+	<!-- Page Wrapper -->
+	<div id="wrapper">
+	
+		<!-- Sidebar -->
+		<ul th:replace="static/sideBar :: commonSidebar"></ul>
+		<!-- End of Sidebar -->
+
+		<!-- Content Wrapper -->
+		<div id="content-wrapper" class="d-flex flex-column">
+
+			<!-- Main Content -->
+			<div id="content">
+
+				<!-- Topbar -->
+				<nav th:replace="static/upNavBar :: commonUpNavbar"></nav>
+				<!-- End of Topbar -->
+
+				<!-- Begin Page Content -->
+				<div class="container-fluid">
+
+					<!-- Page Heading -->
+					<h1 class="h3 mb-2 text-gray-800">Board Write</h1>
+
+					<!-- DataTales Example -->
+					<div class="card shadow mb-4">
+						<div class="card-header py-3">
+							<h6 class="m-0 font-weight-bold text-primary" style="width:3rem; display:inline;">Board</h6>
+						</div>
+						<div class="card-body">
+							<form class="user" id="boardWriteForm" name="boardWriteForm" th:action="@{/boardWrite.do}" method="post" onsubmit="return writeParamCheck();">
+								<div class="table-responsive">
+									<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+										<thead>
+											<tr>
+												<td>
+													<div id="dataTable_filter" class="dataTables_filter">
+														Title:
+														<th:block th:if="${isMod == 1}">
+															<input type="text" class="form-control form-control-sm" 
+															id="boardTitle" name="boardTitle" placeholder="" th:value="${boardData.getTitle()}">
+														</th:block>
+														<th:block th:unless="${isMod == 1}">
+															<input type="text" class="form-control form-control-sm" id="boardTitle" name="boardTitle" placeholder="">
+														</th:block>
+													</div>
+												</td>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>
+													<div class="form-group">
+														Content:
+														<textarea class="form-control" id="boardBody" name="boardBody" rows="5"><th:block th:if="${isMod == 1}" th:text="${boardData.getBody()}"></th:block></textarea>
+													</div>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+								<div class="row">
+									<div class="col-sm-12 col-md-6">
+										<div id="dataTable_filter" class="dataTables_filter">
+											Password: <input type="password" class="form-control form-control-sm" 
+											id="boardPasswd" name="boardPasswd" placeholder="Enter Password.." aria-controls="dataTable">
+											<th:block th:if="${parentBoardIdx != null}">
+												<input type="hidden" id="parentBoardIdx" name="parentBoardIdx" th:value="${parentBoardIdx}" />
+											</th:block>
+											<th:block th:unless="${parentBoardIdx != null}">
+												<input type="hidden" id="parentBoardIdx" name="parentBoardIdx"  />
+											</th:block>
+											<th:block th:if="${isMod == 1}">
+												<input type="hidden" id="modBoardIdx" name="modBoardIdx" th:value="${boardData.getIdx()}" />
+											</th:block>
+											<th:block th:unless="${isMod == 1}">
+												<input type="hidden" id="modBoardIdx" name="modBoardIdx" />
+											</th:block>
+										</div>
+									</div>
+									<div class="col-sm-12 col-md-6">
+										<a href="#" class="btn btn-primary btn-icon-split" style="margin-left:10px; float:right" onclick="$('#boardWriteForm').submit()">
+											<span class="text">Write</span>
+										</a>
+										<a th:href="@{boardList.do}" class="btn btn-primary btn-icon-split" style="float:right">
+											<span class="text">Back List</span>
+										</a>
+									</div>
+								</div>
+							</form>
+						</div>
+					</div>
+
+				</div>
+				<!-- /.container-fluid -->
+
+			</div>
+			<!-- End of Main Content -->
+
+			<!-- Footer -->
+			<footer th:replace="static/footer:: commonFooter"></footer>
+			<!-- End of Footer -->
+
+		</div>
+		<!-- End of Content Wrapper -->
+
+	</div>
+	<!-- End of Page Wrapper -->
+	
+	<!-- Scroll to Top Button-->
+	<a th:replace="static/scrollTopBtn:: commonScrollUpBtn"></a>
+	
+</body>
+</html>

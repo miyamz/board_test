@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.miyam.mBoarder.mapper.BoardMapper">
+	
+	<select id="getBoardList" resultType="com.miyam.mBoarder.model.BoardDto">
+		SELECT b.idx, b.parent_idx, b.writer_idx, b.title, b.body, b.password, b.update_date, u.user_id
+		FROM tbl_board as b
+		JOIN tbl_board_users as u on b.writer_idx = u.idx 
+		WHERE del_flag = 0
+	</select>
+	
+	<select id="selBoardData" parameterType="com.miyam.mBoarder.model.BoardDto" resultType="com.miyam.mBoarder.model.BoardDto">
+		SELECT idx, parent_idx, writer_idx, title, body, password, update_date
+		FROM tbl_board
+		WHERE idx = #{idx}
+		<!-- if test="password != null and password != ''">
+			AND password = #{password}
+		</if-->
+	</select>
+	
+	<insert id="boardAdd" parameterType="com.miyam.mBoarder.model.BoardDto" useGeneratedKeys="true" keyProperty="idx">
+		INSERT INTO tbl_board
+		(parent_idx, writer_idx, title, body, password, update_date)
+		VALUES
+		(#{parent_idx}, #{writer_idx}, #{title}, #{body}, #{password}, now())
+	</insert>
+	
+	<update id="boardUpdate" parameterType="com.miyam.mBoarder.model.BoardDto">
+		UPDATE tbl_board
+		SET		
+				title = #{title},
+				body = #{body},
+				password = #{password},
+				update_date = now()
+		WHERE	
+				idx = #{idx}
+		AND		del_flag = 0
+	</update>
+	
+	<update id="boardDelete" parameterType="int">
+		UPDATE tbl_board
+		SET		
+				del_flag = 1
+		WHERE	
+				idx = #{delIdx}
+		AND		del_flag = 0
+	</update>
+	
+</mapper>

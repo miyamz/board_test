@@ -16,11 +16,13 @@ create table tbl_board(
     title varchar(100) not null,
     body clob,
     password varchar(256),
+    del_flag smallint not null default '0',
     update_date datetime not null,
     primary key(idx),
-    constraint idx_parent_idx index(parent_idx),
-    constraint idx_writer_idx index(writer_idx),
-    constraint idx_title index(title)
+    constraint idx_parent_idx index(parent_idx, del_flag),
+    constraint idx_writer_idx index(writer_idx, del_flag),
+    constraint idx_title index(title, del_flag),
+    constraint idx_del_flag index(del_flag)
 );
 
 INSERT INTO tbl_board_users(user_id, password, name, grade, update_date)

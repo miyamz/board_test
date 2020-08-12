@@ -1,5 +1,6 @@
 package com.miyam.mBoarder.model;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.ibatis.type.Alias;
@@ -16,6 +17,7 @@ public class BoardDto {
 	private String body;
 	private String password;
 	private Date update_date;
+	private String user_id;
 	
 	public long getIdx() {
 		return idx;
@@ -58,5 +60,15 @@ public class BoardDto {
 	}
 	public void setUpdate_date(Date update_date) {
 		this.update_date = update_date;
+	}
+	public String getUserID() {
+		return user_id;
+	}
+	
+	public String getUpdateDateStr() {
+		SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String dateStr = transFormat.format(this.update_date);
+		
+		return dateStr;
 	}
 }
