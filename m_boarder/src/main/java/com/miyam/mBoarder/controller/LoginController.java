@@ -171,4 +171,12 @@ public class LoginController {
 		ret.put("logout", "1");
 		return ret;
 	}
+	
+	@RequestMapping(value= "/social/login.do", method= RequestMethod.GET)
+	public ModelAndView viewSocialLoginPage() {
+		ModelAndView mv = new ModelAndView("social/fblogin");
+		mv.addObject("pageTitle", "Login Page");
+		
+		return mv;
+	}
 }

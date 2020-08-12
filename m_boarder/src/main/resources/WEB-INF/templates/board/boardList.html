@@ -23,6 +23,12 @@
 
 		window.open(contextUrl + "pwCheckPopup.do?i=" + i,'ManagerRegist','width=600, height=700, menubar=no, status=no, toolbar=no, scrollbars=no');
 	}
+	
+	function goPage(pageNum) {
+		var pageSize = $("#selPageSize option:selected").val();
+		
+		location.href = contextUrl + "boardList.do?pn=" + pageNum + "&ps=" + pageSize;
+	}
 </script>
 <body id="page-top">
 	<!-- Page Wrapper -->
@@ -60,8 +66,8 @@
 							<div class="row" style="margin-bottom:10px;">
 								<div class="col-sm-12 col-md-6">
 									<div class="dataTables_length" id="dataTable_length">
-										Show <select name="dataTable_length" aria-controls="dataTable" class="custom-select custom-select-sm form-control form-control-sm">
-												<option value="10">10</option>
+										Show <select name="dataTable_length" id="selPageSize" aria-controls="dataTable" class="custom-select custom-select-sm form-control form-control-sm">
+												<option value="10" selected>10</option>
 												<option value="25">25</option>
 												<option value="50">50</option>
 												<option value="100">100</option>
@@ -109,22 +115,27 @@
 							</div>
 							<div class="row">
 								<div class="col-sm-12 col-md-6">
-									<div class="dataTables_info" id="dataTable_info" role="status" aria-live="polite">
-										Showing 1 to 10 of 57 entries
-									</div>
 								</div>
 								<div class="col-sm-12 col-md-6">
 									<div class="dataTables_paginate paging_simple_numbers" id="dataTable_paginate" style="float:right;">
 										<ul class="pagination">
-											<li class="paginate_button page-item previous disabled" id="dataTable_previous">
-												<a href="#" aria-controls="dataTable" data-dt-idx="0" tabindex="0" class="page-link">Previous</a>
-											</li>
-											<li class="paginate_button page-item active">
-												<a href="#" aria-controls="dataTable" data-dt-idx="1" tabindex="0" class="page-link">1</a>
-											</li>
-											<li class="paginate_button page-item next" id="dataTable_next">
-												<a href="#" aria-controls="dataTable" data-dt-idx="7" tabindex="0" class="page-link">Next</a>
-											</li>
+											<th:block th:if="${prevPageNum != 0}">
+												<li class="paginate_button page-item previous" id="dataTable_previous">
+													<a href="#" th:onclick="|javascript:goPage('${prevPageNum}')|" aria-controls="dataTable" class="page-link">Prev</a>
+												</li>
+											</th:block>
+											<th:block th:each="i: ${#numbers.sequence(startPageNum, endPageNum)}">
+												<li class="paginate_button page-item active">
+													<a href="#" th:onclick="|javascript:goPage('${i}')|" aria-controls="dataTable" class="page-link">
+														<th:block th:text="${i}"></th:block>
+													</a>
+												</li>
+											</th:block>
+											<th:block th:if="${nextPageNum != 0}">
+												<li class="paginate_button page-item next" id="dataTable_next">
+													<a href="#" th:onclick="|javascript:goPage('${nextPageNum}')|" aria-controls="dataTable" class="page-link">Next</a>
+												</li>
+											</th:block>
 										</ul>
 									</div>
 								</div>

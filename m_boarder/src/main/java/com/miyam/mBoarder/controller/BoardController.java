@@ -36,13 +36,39 @@ public class BoardController {
 	}
 	
 	@RequestMapping(value= "/boardList.do", method= RequestMethod.GET)
-	public ModelAndView viewBoardListPage() {
+	public ModelAndView viewBoardListPage(HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView mv = new ModelAndView("board/boardList");
 		mv.addObject("pageTitle", "BoardList Page");
 		
-		List<BoardDto> boardList = boardService.getBoardList();
+		String pageNumStr = request.getParameter("pn");
+		String pageSizeStr = request.getParameter("ps");
+		
+		int pageNum = 1;
+		if (NumberUtils.isDigits(pageNumStr) == true)
+			pageNum = Integer.parseInt(pageNumStr);
+
+		int pageSize = 10;
+		if (NumberUtils.isDigits(pageSizeStr) == true)
+			pageSize = Integer.parseInt(pageSizeStr);
+		
+		List<BoardDto> boardList = boardService.getBoardList(pageNum, pageSize);
+		int totalCnt = boardService.getBoardTotalCnt();
+		// 필요한 숫자 전부 계산
+		int totalPageCnt = totalCnt % pageSize != 0 ? (totalCnt / pageSize) + 1 : (totalCnt / pageSize);
+		int startPageNum = pageNum % pageSize == 0 ? (((pageNum / pageSize) - 1) * pageSize) + 1 : ((pageNum / pageSize) * pageSize) + 1;
+		int endPageNum = startPageNum + (pageSize - 1);
+		endPageNum = endPageNum > totalPageCnt ? totalPageCnt : endPageNum;
+		int prevPageNum = startPageNum - 1;
+		int nextPageNum = endPageNum + 1;
+		nextPageNum = nextPageNum > totalPageCnt ? 0 : nextPageNum;
 		
 		mv.addObject("boardList", boardList);
+		mv.addObject("totalCnt", totalCnt);
+		mv.addObject("totalPageCnt", totalPageCnt);
+		mv.addObject("startPageNum", startPageNum);
+		mv.addObject("endPageNum", endPageNum);
+		mv.addObject("prevPageNum", prevPageNum);
+		mv.addObject("nextPageNum", nextPageNum);
 		
 		return mv;
 	}

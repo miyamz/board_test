@@ -8,7 +8,8 @@ import com.miyam.mBoarder.model.BoardDto;
 
 @Mapper
 public interface BoardMapper {
-	public List<BoardDto> getBoardList();
+	public int getBoardTotalCnt();
+	public List<BoardDto> getBoardList(int pageNum, int pageSize);
 	public BoardDto selBoardData(BoardDto boardInfo);
 	public int boardAdd(BoardDto insertData);
 	public int boardUpdate(BoardDto updateData);

@@ -8,7 +8,8 @@ public enum PermissionCheckURL {
 	REGIST_URL("regist.do"),
 	ERROR_URL(),
 	VIEWPAGE_URL("index.do", "pwCheckPopup.do", "boardList.do", "boardWrite.do", "boardView.do", "boardDelete.do"),
-	RESOURCE_PATH("img", "css", "js", "scss", "vendor");
+	RESOURCE_PATH("img", "css", "js", "scss", "vendor"),
+	SOCIAL_URL("oauth2", "social");
 	
 	List<String> urls;
 	

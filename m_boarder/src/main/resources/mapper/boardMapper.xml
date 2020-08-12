@@ -5,11 +5,23 @@
 
 <mapper namespace="com.miyam.mBoarder.mapper.BoardMapper">
 	
-	<select id="getBoardList" resultType="com.miyam.mBoarder.model.BoardDto">
-		SELECT b.idx, b.parent_idx, b.writer_idx, b.title, b.body, b.password, b.update_date, u.user_id
-		FROM tbl_board as b
-		JOIN tbl_board_users as u on b.writer_idx = u.idx 
+	<select id="getBoardTotalCnt" resultType="int">
+		SELECT COUNT(1)
+		FROM tbl_board
 		WHERE del_flag = 0
+	</select>
+	
+	<select id="getBoardList" resultType="com.miyam.mBoarder.model.BoardDto">
+		SELECT row_number, idx, parent_idx, writer_idx, title, body, password, update_date, user_id
+		FROM (
+			SELECT
+				rownum() as  row_number,
+				b.idx, b.parent_idx, b.writer_idx, b.title, b.body, b.password, b.update_date, u.user_id
+			FROM tbl_board as b
+			LEFT OUTER JOIN tbl_board_users as u on b.writer_idx = u.idx 
+			WHERE del_flag = 0
+		) as subquery
+		WHERE row_number > ((#{pageNum} - 1) * 10) limit #{pageSize}
 	</select>
 	
 	<select id="selBoardData" parameterType="com.miyam.mBoarder.model.BoardDto" resultType="com.miyam.mBoarder.model.BoardDto">

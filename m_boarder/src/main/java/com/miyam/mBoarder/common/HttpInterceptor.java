@@ -85,6 +85,9 @@ public class HttpInterceptor extends HandlerInterceptorAdapter {
 			
 			if(urlChecker(url, PermissionCheckURL.RESOURCE_PATH) == true)
 				return true;
+			
+			if(urlChecker(url, PermissionCheckURL.SOCIAL_URL) == true)
+				return true;
 		}
 		return false;
 	}
