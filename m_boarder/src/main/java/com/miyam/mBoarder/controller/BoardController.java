@@ -166,7 +166,7 @@ public class BoardController {
 		
 		// 로그인 처리만 한다.. 그 뒤 index페이지로 redirect
 		String title = request.getParameter("boardTitle");
-		String body = request.getParameter("boardBody");
+		String body = request.getParameter("hdboardContentStr");
 		String passwd = request.getParameter("boardPasswd");
 		String modIdx = request.getParameter("modBoardIdx");
 		String parentIdxStr = request.getParameter("parentBoardIdx");

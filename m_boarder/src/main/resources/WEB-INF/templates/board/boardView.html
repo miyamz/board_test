@@ -23,6 +23,15 @@
 			alert("글 삭제실패!! \n 관리자에게 문의해주세요.")
 			location.href = contextUrl + "boardList.do"
 		}
+		
+		CKEDITOR.replace('readBoardBody');
+		
+		var bodyContent = $("#hdViewContent").val();
+		if (typeof bodyContent != "undefined")
+		{
+			CKEDITOR.instances.readBoardBody.setData(bodyContent)
+			CKEDITOR.instances.readBoardBody.config.readOnly = true
+		}
 	});
 	
 	function moveBoardModify() {
@@ -68,7 +77,10 @@
 										</thead>
 										<tbody>
 											<tr>
-												<td><th:block th:text="${boardData.getBody()}"></th:block></td>
+												<td>
+													<textarea id="readBoardBody" name="readBoardBody"></textarea>
+													<input type="hidden" id="hdViewContent" th:value="${boardData.getBody()}" />
+												</td>
 											</tr>
 										</tbody>
 									</table>

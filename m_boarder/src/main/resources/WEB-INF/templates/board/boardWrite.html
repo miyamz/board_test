@@ -5,7 +5,7 @@
 <script th:inline="javascript">
 	/*<![CDATA[*/
 	var isSuccess = '[[${isSuccess}]]';
-	/*]]>*/
+	/*]]>*/	
 	$(function() {
 		if (isSuccess == '0') {
 			alert("글쓰기 실패!! \n 관리자에게 문의해주세요.")
@@ -14,8 +14,14 @@
 		else if(isSuccess == '1') {
 			location.href = contextUrl + "boardList.do"
 		}
-	});
-
+		
+		CKEDITOR.replace('boardBody');
+		
+		var bodyContent = $("#hdboardContentStr").val();
+		if (typeof bodyContent != "undefined" && bodyContent.length > 0)
+			CKEDITOR.instances.boardBody.setData(bodyContent)
+	})
+	
 	function writeParamCheck() {
 		if ($.trim($("#boardTitle").val()).length <= 0) {
 			alert("글의 제목은 작성하셔야 합니다.");
@@ -34,6 +40,10 @@
 				return false;
 			}
 		}
+		
+		var content = CKEDITOR.instances.boardBody.getData()
+		
+		$("#hdboardContentStr").val(content)
 		
 		return true;
 	}
@@ -92,7 +102,8 @@
 												<td>
 													<div class="form-group">
 														Content:
-														<textarea class="form-control" id="boardBody" name="boardBody" rows="5"><th:block th:if="${isMod == 1}" th:text="${boardData.getBody()}"></th:block></textarea>
+														<textarea class="form-control" id="boardBody" name="boardBody" rows="5"></textarea>
+														<input type="hidden" id="hdboardContentStr" name="hdboardContentStr" th:value="${isMod == 1 ? boardData.getBody() : ''}" />
 													</div>
 												</td>
 											</tr>

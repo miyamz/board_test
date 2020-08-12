@@ -26,12 +26,14 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 "/css/**",
                 "/js/**",
                 "/scss/**",
-                "/vendor/**")
+                "/vendor/**",
+                "/ckeditor/**")
                 .addResourceLocations(
                         "classpath:/WEB-INF/common/img/",
                         "classpath:/WEB-INF/common/css/",
                         "classpath:/WEB-INF/common/js/",
                         "classpath:/WEB-INF/common/scss/",
-                        "classpath:/WEB-INF/common/vendor/");
+                        "classpath:/WEB-INF/common/vendor/",
+                        "classpath:/WEB-INF/common/ckeditor/");
     }
 }

@@ -14,13 +14,16 @@
 	<select id="getBoardList" resultType="com.miyam.mBoarder.model.BoardDto">
 		SELECT row_number, idx, parent_idx, writer_idx, title, body, password, update_date, user_id
 		FROM (
-			SELECT
-				rownum() as  row_number,
-				b.idx, b.parent_idx, b.writer_idx, b.title, b.body, b.password, b.update_date, u.user_id
-			FROM tbl_board as b
-			LEFT OUTER JOIN tbl_board_users as u on b.writer_idx = u.idx 
-			WHERE del_flag = 0
-		) as subquery
+			SELECT rownum() as  row_number, idx, parent_idx, writer_idx, title, body, password, update_date, user_id
+			FROM (
+				SELECT
+					b.idx, b.parent_idx, b.writer_idx, b.title, b.body, b.password, b.update_date, u.user_id
+				FROM tbl_board as b
+				LEFT OUTER JOIN tbl_board_users as u on b.writer_idx = u.idx 
+				WHERE del_flag = 0
+				ORDER BY b.idx DESC
+			) as subquery1
+		) as subquery2
 		WHERE row_number > ((#{pageNum} - 1) * 10) limit #{pageSize}
 	</select>
 	
