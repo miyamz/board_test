@@ -48,6 +48,32 @@
 		
 		return true;
 	}
+    
+    function fbLoginAction() {
+    	FB.login(function(response) {
+    		FB.api('/me?field=id,name', function(response) {
+    			var fb_data = jQuery.parseJSON(JSON.stringify(response));
+    			
+				// ajax로 로그인 비동기 처리
+    			$.ajax({
+    				type: "POST",
+    				url: contextUrl + "fbLogin.do",
+    				data: JSON.stringify(fb_data),
+    				contentType: "application/json; charset=UTF-8",
+    				success: function(data, status, xhr) {
+    					if (data.isLogin == 1) {
+    						location.href = contextUrl + "index.do"
+    					} else {
+    						alert("로그인 실패\n**페이스북 계정으로 사이트 가입한적이 있는지 확인해주세요.**")
+    					}
+    				},
+    				error: function(request, status, error) {
+    					alert("페이스북 로그인 처리실패: " + request.responseText);
+    				}
+    			});
+    		})
+    	}, {scope: 'public_profile, email', return_scopes: true})
+    }
 </script>
 <body class="bg-gradient-primary">
 	<div class="container">
@@ -81,7 +107,7 @@
 										</div>
 										<input type="submit" class="btn btn-primary btn-user btn-block" value="Login" />
 										<hr>
-										<a href="javascript:checkLoginState();" class="btn btn-facebook btn-user btn-block">
+										<a href="javascript:fbLoginAction();" class="btn btn-facebook btn-user btn-block">
 											<i class="fab fa-facebook-f fa-fw"></i> Login with Facebook
 										</a>
 									</form>

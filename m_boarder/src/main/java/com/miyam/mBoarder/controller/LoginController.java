@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -95,72 +96,7 @@ public class LoginController {
 			return mv;
 		}
 	}
-	/*
-	@RequestMapping(value="/resetRequest.do", method=RequestMethod.GET)
-	public ModelAndView requestPasswordReset() {
-		ModelAndView mv = new ModelAndView("/pages/forgotPW");
-		return mv;
-	}
-	
-	@RequestMapping(value="/resetRequest.do", method=RequestMethod.POST)
-	public ModelAndView requestPasswordReset(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		ModelAndView mv = new ModelAndView("/pages/forgotPW");
-		RandomUtil ru = RandomUtil.getInstance();
-		
-		String email = request.getParameter("email");
-		String ranpw = ru.getRandomPassword(10);
-		
-		boolean result = managerLoginService.requestResetPassword(email, ranpw);
-		
-		if (result == true) {
-			mv.addObject("isReset", 1);
-			return mv;
-		} else {
-			mv.addObject("isReset", 0);
-			return mv;
-		}
-	}
-	
-	@RequestMapping(value="/modifyPass.do", method=RequestMethod.GET)
-	public ModelAndView modifyPasswordView(HttpServletRequest request, HttpServletResponse response) throws NumberFormatException, Exception {
-		ModelAndView mv = new ModelAndView("/pages/modifyPW");
-		
-		String rs = request.getParameter("r");
-		String mail = "";
-		if (rs == null) rs = "";
-		if (rs.length() > 0) {
-			ManagerInfoVO loginVO = managerLoginService.getManagerInfoByIdx(Integer.parseInt(rs));
 
-			if (loginVO != null)
-				mail = loginVO.getEmail();
-		}
-		mv.addObject("user_mail", mail);
-		mv.addObject("is_reset", rs);
-		return mv;
-	}
-	
-	@RequestMapping(value="/modifyPass.do", method=RequestMethod.POST)
-	public ModelAndView modifyPassword(HttpServletRequest request, HttpServletResponse response) throws Exception {
-		ModelAndView mv = new ModelAndView("/pages/modifyPW");
-		
-		String is_reset = request.getParameter("is_reset");
-		String mail = request.getParameter("email");
-		String prevpw = request.getParameter("prevpass");
-		String newpw = request.getParameter("passwd");
-		
-		boolean result = managerLoginService.modifyPassword(is_reset, mail, prevpw, newpw);
-		
-		if (result == true) {
-			mv.addObject("is_reset", is_reset);
-			mv.addObject("res", "1");
-		} else {
-			mv.addObject("is_reset", is_reset);
-			mv.addObject("res", "0");
-		}
-		
-		return mv;
-	}
-	*/
 	@RequestMapping(value="/logout.do", method=RequestMethod.POST)
 	public @ResponseBody Map<String, Object> logOut(HttpServletRequest request, HttpServletResponse response) {
 		Map<String, Object> ret = new HashMap<String, Object>();
@@ -172,11 +108,56 @@ public class LoginController {
 		return ret;
 	}
 	
-	@RequestMapping(value= "/social/login.do", method= RequestMethod.GET)
-	public ModelAndView viewSocialLoginPage() {
-		ModelAndView mv = new ModelAndView("social/fblogin");
-		mv.addObject("pageTitle", "Login Page");
+	// 페이스북 정보를 이용한 가입
+	@RequestMapping(value="/fbRegist.do", method=RequestMethod.POST)
+	public @ResponseBody Map<String, Object> facebookRegistUser(@RequestBody Map<String, Object> jsonData) throws Exception {
+		String id = (String)jsonData.get("id");
+		String name = (String)jsonData.get("name");
+		String password = "facebook:" + id;
+		Map<String, Object> ret = new HashMap<String, Object>();
+		int grade = 90;
 		
-		return mv;
+		int resultKey = loginService.userAdd(id, password, name, grade);
+		
+		if (resultKey > 0) {
+			ret.put("isRegist", 1);
+		} else {
+			ret.put("isRegist", 0);
+		}
+		
+		return ret;
+	}
+	
+	// 페이스북 정보를 이용한 로그인
+	@RequestMapping(value="/fbLogin.do", method=RequestMethod.POST)
+	public @ResponseBody Map<String, Object> facebookLoginUser(@RequestBody Map<String, Object> jsonData, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		String id = (String)jsonData.get("id");
+		String password = "facebook:" + id;
+		Map<String, Object> ret = new HashMap<String, Object>();
+		
+		BoardUserDto userInfo = loginService.loginUser(id, password);
+		
+		if (userInfo == null) {
+			ret.put("isLogin", 0);
+		} else {
+			HttpSession session = request.getSession();
+			session.setAttribute(LoginController.SESSION_KEY, userInfo.toString());
+			ret.put("isLogin", 1);
+		}
+		
+		return ret;
+	}
+	
+	// 페이스북 정보를 이용한 로그아웃
+	@RequestMapping(value="/fbLogout.do", method=RequestMethod.POST)
+	public @ResponseBody Map<String, Object> facebookLogOutUser(HttpServletRequest request) throws Exception {
+		Map<String, Object> ret = new HashMap<String, Object>();
+		HttpSession session = request.getSession();
+		// 세션 삭제 (모든 속성 삭제는 invalidate함수)
+		session.removeAttribute(LoginController.SESSION_KEY);
+		
+		ret.put("logout", "1");
+		
+		return ret;
 	}
 }

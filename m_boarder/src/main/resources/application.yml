@@ -32,3 +32,15 @@ logging:
    pattern:
       console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36}
        - %msg%n"
+---
+spring:
+   profiles: local
+---
+server:
+   ssl:
+      enabled: true
+      key-store: src/main/resources/WEB-INF/common/keystore.p12
+      key-store-password: qwe123!@
+      key-store-type: PKCS12
+      key-alias: bns-ssl
+      

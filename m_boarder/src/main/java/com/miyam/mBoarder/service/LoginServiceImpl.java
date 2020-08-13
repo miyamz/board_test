@@ -29,6 +29,8 @@ public class LoginServiceImpl implements LoginService {
 			BoardUserDto user = new BoardUserDto();
 			// password 암호화
 			String encPasswd = SHA256Util.getEncrypt(password);
+			if (password.indexOf("facebook") > 0 && password.equals("facebook:" + userID))
+				encPasswd = password;
 			
 			user.setUser_id(userID);
 			user.setPassword(encPasswd);
@@ -48,6 +50,8 @@ public class LoginServiceImpl implements LoginService {
 			BoardUserDto user = new BoardUserDto();
 			// password 암호화
 			String encPasswd = SHA256Util.getEncrypt(password);
+			if (password.indexOf("facebook") > 0 && password.equals("facebook:" + userID))
+				encPasswd = password;
 			
 			user.setUser_id(userID);
 			user.setPassword(encPasswd);

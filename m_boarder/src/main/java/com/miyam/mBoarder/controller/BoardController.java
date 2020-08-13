@@ -42,6 +42,7 @@ public class BoardController {
 		
 		String pageNumStr = request.getParameter("pn");
 		String pageSizeStr = request.getParameter("ps");
+		String searchWord = request.getParameter("sw");
 		
 		int pageNum = 1;
 		if (NumberUtils.isDigits(pageNumStr) == true)
@@ -51,8 +52,9 @@ public class BoardController {
 		if (NumberUtils.isDigits(pageSizeStr) == true)
 			pageSize = Integer.parseInt(pageSizeStr);
 		
-		List<BoardDto> boardList = boardService.getBoardList(pageNum, pageSize);
-		int totalCnt = boardService.getBoardTotalCnt();
+		
+		List<BoardDto> boardList = boardService.getBoardList(pageNum, pageSize, searchWord);
+		int totalCnt = boardService.getBoardTotalCnt(searchWord);
 		// 필요한 숫자 전부 계산
 		int totalPageCnt = totalCnt % pageSize != 0 ? (totalCnt / pageSize) + 1 : (totalCnt / pageSize);
 		int startPageNum = pageNum % pageSize == 0 ? (((pageNum / pageSize) - 1) * pageSize) + 1 : ((pageNum / pageSize) * pageSize) + 1;
@@ -69,6 +71,7 @@ public class BoardController {
 		mv.addObject("endPageNum", endPageNum);
 		mv.addObject("prevPageNum", prevPageNum);
 		mv.addObject("nextPageNum", nextPageNum);
+		mv.addObject("listSize", pageSize);
 		
 		return mv;
 	}

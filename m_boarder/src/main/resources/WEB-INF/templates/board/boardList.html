@@ -25,9 +25,23 @@
 	}
 	
 	function goPage(pageNum) {
-		var pageSize = $("#selPageSize option:selected").val();
+		var param = get_query();
+		var pageSize = $("#selPageSize option:selected").val()
 		
-		location.href = contextUrl + "boardList.do?pn=" + pageNum + "&ps=" + pageSize;
+		if (typeof param.sw == "undefined")
+			param.sw = ''
+		
+		location.href = contextUrl + "boardList.do?pn=" + pageNum + "&ps=" + pageSize + "&sw=" + param.sw;
+	}
+	
+	function modPageSize() {
+		var param = get_query();
+		var pageSize = $("#selPageSize option:selected").val()
+		
+		if (typeof param.pn != "int")
+			param.pn = 1
+		
+		location.href = contextUrl + "boardList.do?pn=" + param.pn + "&ps=" + pageSize + "&sw=" + param.sw;
 	}
 </script>
 <body id="page-top">
@@ -66,18 +80,15 @@
 							<div class="row" style="margin-bottom:10px;">
 								<div class="col-sm-12 col-md-6">
 									<div class="dataTables_length" id="dataTable_length">
-										Show <select name="dataTable_length" id="selPageSize" aria-controls="dataTable" class="custom-select custom-select-sm form-control form-control-sm">
-												<option value="10" selected>10</option>
-												<option value="25">25</option>
-												<option value="50">50</option>
-												<option value="100">100</option>
+										Show <select name="dataTable_length" id="selPageSize" aria-controls="dataTable" class="custom-select custom-select-sm form-control form-control-sm" onchange="modPageSize()">
+												<option value="10" th:selected="${listSize} == 10">10</option>
+												<option value="25" th:selected="${listSize} == 25">25</option>
+												<option value="50" th:selected="${listSize} == 50">50</option>
+												<option value="100" th:selected="${listSize} == 100">100</option>
 											</select>
 									</div>
 								</div>
 								<div class="col-sm-12 col-md-6">
-									<div id="dataTable_filter" class="dataTables_filter">
-										Search: <input type="search" class="form-control form-control-sm" placeholder="" aria-controls="dataTable">
-									</div>
 								</div>
 							</div>
 							<div class="table-responsive">

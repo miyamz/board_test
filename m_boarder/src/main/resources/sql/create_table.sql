@@ -1,3 +1,6 @@
+CREATE ALIAS IF NOT EXISTS FT_INIT FOR "org.h2.fulltext.FullText.init";
+CALL FT_INIT();
+
 create table tbl_board_users(
     idx bigint not null auto_increment,
     user_id varchar(20) not null,
@@ -24,6 +27,7 @@ create table tbl_board(
     constraint idx_title index(title, del_flag),
     constraint idx_del_flag index(del_flag)
 );
+CALL FT_CREATE_INDEX('PUBLIC', 'TBL_BOARD', 'BODY');
 
 INSERT INTO tbl_board_users(user_id, password, name, grade, update_date)
 VALUES ('root', '6b1944947aa2ae57c54288b1381ea0c94cffb55c50cc0174d302af2a6ee8bcf4', '관리자', 1, now());

@@ -19,21 +19,27 @@ public class BoardServiceImpl implements BoardService {
 	@Autowired
 	BoardMapper bMapper;
 	
-	public int getBoardTotalCnt() {
+	public int getBoardTotalCnt(String searchWord) {
 		int retCnt = 0;
 		try {
-			retCnt = bMapper.getBoardTotalCnt();
+			if (searchWord == null || searchWord.trim().length() == 0)
+				retCnt = bMapper.getBoardTotalCnt();
+			else
+				retCnt = bMapper.getBoardTotalCntWithSearch(searchWord);
 		} catch(Exception ex) {
 			logger.error(String.format("Board error: [%s] - DB Select TotalCnt Error...", ex.getStackTrace()));
 		}
 		return retCnt;
 	}
 	
-	public List<BoardDto> getBoardList(int pageNum, int pageSize) {
+	public List<BoardDto> getBoardList(int pageNum, int pageSize, String searchWord) {
 		List<BoardDto> ret = null;
 		
 		try {
-			ret = bMapper.getBoardList(pageNum, pageSize);
+			if (searchWord == null || searchWord.trim().length() == 0)
+				ret = bMapper.getBoardList(pageNum, pageSize);
+			else
+				ret = bMapper.getBoardListSearch(pageNum, pageSize, searchWord);
 		} catch(Exception ex) {
 			logger.error(String.format("Board error: [%s] - DB Select List Error...", ex.getStackTrace()));
 		}

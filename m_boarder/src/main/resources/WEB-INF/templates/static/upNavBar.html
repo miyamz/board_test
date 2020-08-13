@@ -11,14 +11,30 @@
 			</button>
 		</form>
 
+		<script>
+			function searchBoard() {
+				var searchWord = $("#searchWord").val();
+				var pageNum = 1
+				var pageSize = 10
+				
+				if ($("#selPageSize").length > 0)
+					pageSize = $("#selPageSize option:selected").val()
+					
+				param = get_query()
+				param.pn = 1
+			
+				location.href = contextUrl + "boardList.do" + "?pn=" + param.pn + "&ps=" + pageSize + "&sw=" + searchWord
+			}
+		</script>
+
 		<!-- Topbar Search -->
 		<form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
 			<div class="input-group">
 				<input type="text" class="form-control bg-light border-0 small"
-					placeholder="Search for..." aria-label="Search"
+					placeholder="Search for..." aria-label="Search" id="searchWord"
 					aria-describedby="basic-addon2">
 				<div class="input-group-append">
-					<button class="btn btn-primary" type="button">
+					<button class="btn btn-primary" type="button" onclick="searchBoard()">
 						<i class="fas fa-search fa-sm"></i>
 					</button>
 				</div>
@@ -63,7 +79,7 @@
 				<div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
 					aria-labelledby="userDropdown">
 					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" href="javascript:logout();" > 
+					<a class="dropdown-item" href="javascript:fbLogoutAction();" > 
 						<i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
 						Logout
 					</a>

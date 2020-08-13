@@ -10,6 +10,8 @@ import com.miyam.mBoarder.model.BoardDto;
 public interface BoardMapper {
 	public int getBoardTotalCnt();
 	public List<BoardDto> getBoardList(int pageNum, int pageSize);
+	public int getBoardTotalCntWithSearch(String searchWord);
+	public List<BoardDto> getBoardListSearch(int pageNum, int pageSize, String searchWord);
 	public BoardDto selBoardData(BoardDto boardInfo);
 	public int boardAdd(BoardDto insertData);
 	public int boardUpdate(BoardDto updateData);

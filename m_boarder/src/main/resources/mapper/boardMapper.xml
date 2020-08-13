@@ -27,6 +27,28 @@
 		WHERE row_number > ((#{pageNum} - 1) * 10) limit #{pageSize}
 	</select>
 	
+	<select id="getBoardTotalCntWithSearch" resultType="int">
+		SELECT count(1)
+		FROM FT_SEARCH_DATA(#{searchWord}, 0, 0) FT, TBL_BOARD T
+		WHERE FT.`TABLE`='TBL_BOARD' AND T.IDX=FT.KEYS[1] AND T.del_flag = 0;
+	</select>
+	
+	<!-- full text검색 기능 -->
+	<select id="getBoardListSearch" resultType="com.miyam.mBoarder.model.BoardDto">
+		SELECT row_number, idx, parent_idx, writer_idx, title, body, password, update_date, user_id
+		FROM (
+			SELECT rownum() as  row_number, idx, parent_idx, writer_idx, title, body, password, update_date, user_id
+			FROM (
+				SELECT T.idx, T.parent_idx, T.writer_idx, T.title, T.body, T.password, T.update_date, u.user_id 
+				FROM FT_SEARCH_DATA(#{searchWord}, 0, 0) FT, TBL_BOARD T
+				LEFT OUTER JOIN tbl_board_users as u on T.writer_idx = u.idx 
+				WHERE FT.`TABLE`='TBL_BOARD' AND T.IDX=FT.KEYS[1] AND T.del_flag = 0
+				ORDER BY IDX DESC
+			) as subquery1
+		) as subquery2
+		WHERE row_number > ((#{pageNum} - 1) * 10) limit #{pageSize}
+	</select>
+	
 	<select id="selBoardData" parameterType="com.miyam.mBoarder.model.BoardDto" resultType="com.miyam.mBoarder.model.BoardDto">
 		SELECT idx, parent_idx, writer_idx, title, body, password, update_date
 		FROM tbl_board

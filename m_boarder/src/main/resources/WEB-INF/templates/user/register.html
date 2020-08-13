@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="static/header :: commonHead"></head>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var message = '[[${isClose}]]';
+    /*]]>*/
+    
+    $(function() {
+        if (message == '1') {
+            alert('Regist Success!!');
+            window.close();
+        }
+        if (message == '2') {
+            alert('Regist Fail...');
+            window.close();
+        }
+    
+        $("#rePeatPasswd").blur(function() {
+            if ($("#passwd").val() != $("#rePeatPasswd").val()) {
+                alert("비밀번호가 일치하는지 확인해 주세요.");
+            }
+        });
+    });
+    
+    function registCheck() {
+        // 아이디를 등록할때 필요한 validationCheck
+        var passwordRegEx = /^(?=.*[a-zA-Z])((?=.*\d)|(?=.*\W)).{6,20}$/;
+        
+        if ($("#userID").val().length() <= 0) {
+            alert("아이디를 입력해주세요.");
+            $("#userID").focus();
+            return false;
+        }
+        
+        if (passwordRegEx.test($("#passwd").val()) == false) {
+            alert("비밀번호는 영문,숫자,특수문자 1자이상 조합 총길이 6자이상 20자이하입니다.");
+            $("#passwd").focus();
+            return false;
+        }
+        
+        if ($("#passwd").val() != $("#rePeatPasswd").val()) {
+            alert("비밀번호가 서로 일치하는지 확인해 주세요.");
+            $("#rePeatPasswd").focus();
+            return false;
+        }
+        
+        if ($("#name").val().length() <= 0) {
+            alert("이름은 1자이상 작성해야 합니다.");
+            $("#name").focus();
+            return false;
+        }
+        
+        return true;
+    }
+    
+    function closeWindow() {
+        window.close();
+    }
+    
+    function fbRegistAction() {
+    	FB.login(function(response) {
+    		FB.api('/me?field=id,name', function(response) {
+    			var fb_data = jQuery.parseJSON(JSON.stringify(response));
+    			
+				// ajax로 로그인 비동기 처리
+    			$.ajax({
+    				type: "POST",
+    				url: contextUrl + "fbRegist.do",
+    				data: JSON.stringify(fb_data),
+    				contentType: "application/json; charset=UTF-8",
+    				success: function(data, status, xhr) {
+    					if (data.isRegist == 1) {
+    						alert("가입 성공!!")
+    					} else {
+    						alert("가입등록 실패")
+    					}
+						closeWindow();
+    				},
+    				error: function(request, status, error) {
+    					alert("페이스북 가입실패: " + request.responseText);
+    				}
+    			});
+    		})
+    	}, {scope: 'public_profile, email', return_scopes: true})
+    }
+</script>
+<body class="bg-gradient-primary">
+    <div class="container">
+        <div class="card o-hidden border-0 shadow-lg my-5">
+            <div class="card-body p-0">
+                <!-- Nested Row within Card Body -->
+                <div class="row">
+                    <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
+                    <div class="col-lg-7">
+                        <div class="p-5">
+                            <div class="text-center">
+                                <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
+                            </div>
+                            <form name="managerRegistForm" th:action="@{/regist.do}" method="post" onsubmit="return registCheck();">
+                                <div class="form-group">
+                                    <input type="text" class="form-control form-control-user"
+                                        id="name" name="name" placeholder="Enter Name...">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control form-control-user"
+                                        id="userID" name="userID" placeholder="Enter ID...">
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                        <input type="password" class="form-control form-control-user"
+                                            id="passwd" name="passwd" placeholder="Enter Password..">
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <input type="password" class="form-control form-control-user"
+                                            id="rePeatPasswd" placeholder="Repeat Password">
+                                    </div>
+                                </div>
+                                    <input type="submit" class="btn btn-primary btn-user btn-block" value="유저 등록" />
+                                <hr>
+                                <a href="javascript:fbRegistAction()" class="btn btn-facebook btn-user btn-block"> 
+                                    <i class="fab fa-facebook-f fa-fw"></i> Register with Facebook
+                                </a>
+                            </form>
+                            <hr>
+                            <div class="text-center">
+                            	<a class="small" href="javascript:closeWindow();">Close Window!!</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

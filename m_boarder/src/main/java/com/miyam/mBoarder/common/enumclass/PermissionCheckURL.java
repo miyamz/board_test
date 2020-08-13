@@ -8,8 +8,8 @@ public enum PermissionCheckURL {
 	REGIST_URL("regist.do"),
 	ERROR_URL(),
 	VIEWPAGE_URL("index.do", "pwCheckPopup.do", "boardList.do", "boardWrite.do", "boardView.do", "boardDelete.do"),
-	RESOURCE_PATH("img", "css", "js", "scss", "vendor", "ckeditor"),
-	SOCIAL_URL("oauth2", "social");
+	RESOURCE_PATH("img", "css", "js", "scss", "vendor", "ckeditor", "favicon"),
+	FACEBOOK_AUTH_URL("fbRegist.do", "fbLogin.do", "fbLogout.do");
 	
 	List<String> urls;
 	
