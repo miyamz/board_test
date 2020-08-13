@@ -13,6 +13,19 @@
 * tomcat 9(내장)
 * CKEditor4
 
+#### 페이지 요청
+	+ /login.do : 로그인 페이지. 시작페이지로 모든 유저 접근. 로그인 세션을 잃어버리거나 페이지 권한이 없는경우 로그인페이지로 이동한다.
+	+ /register.do: 회원 가입페이지.
+	+ /index.do: 메인페이지 화면(빈화면)
+	+ /boardList.do: 게시판 리스트 조회
+	+ /boardView.do: 게시글 보기
+	+ /boardWrite.do: 게시글 쓰기
+	+ /logout.do: 로그아웃
+	+ /boardDelete.do: 게시글 삭제(글쓴이가 아니면 안됨)
+	+ /fbLogin.do : 페이스북 로그인
+	+ /fbRegister.do: 페이스북 가입페이지
+	+ /fbLogout.do: 페이스북 로그아웃
+
 #### 간략한 개발 설명
 Spring MVC개발 경험을 바탕으로 Spring Boot MVC형태로 프로젝트 생성
 Url Mapping Route를 이용한 웹호출을 구현했습니다.
